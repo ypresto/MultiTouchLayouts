@@ -30,25 +30,24 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package pl.androiddev.djlayouts;
 
-import java.util.HashMap;
-
 import android.graphics.Rect;
-import android.util.Log;
+import android.util.SparseIntArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class DJDispatcher {
 
-    private final HashMap<Integer, Integer> mPointerToViewMap = new HashMap<Integer, Integer>();
+    private final SparseIntArray mPointerToViewSparse = new SparseIntArray();
+
     private final Rect mTmpRect = new Rect();
 
-    private MotionEvent convertEvent(View targetView, MotionEvent eventToConvert, int pointerId,
+    private MotionEvent convertEvent(View targetView, MotionEvent eventToConvert, int pointerIndex,
             int newAction) {
         final MotionEvent newEvent = MotionEvent.obtain(eventToConvert);
         newEvent.setAction(newAction);
-        newEvent.setLocation(eventToConvert.getX(pointerId) - targetView.getLeft(),
-                eventToConvert.getY(pointerId) - targetView.getTop());
+        newEvent.setLocation(eventToConvert.getX(pointerIndex) - targetView.getLeft(),
+                eventToConvert.getY(pointerIndex) - targetView.getTop());
         return newEvent;
     }
 
@@ -59,52 +58,53 @@ public class DJDispatcher {
         final int childCount = group.getChildCount();
         final int pointerCount = ev.getPointerCount();
         final int actionCode = ev.getAction() & MotionEvent.ACTION_MASK;
-        final int pointerId = ev
-                .getPointerId(ev.getAction() >> MotionEvent.ACTION_POINTER_INDEX_SHIFT);
+        final int pointerIndex = ev.getAction() >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+        final int pointerId = ev.getPointerId(pointerIndex);
         switch (actionCode) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN:
                 for (int j = 0; j < childCount; ++j) {
                     final View child = group.getChildAt(j);
                     child.getHitRect(mTmpRect);
-                    if (mTmpRect.contains((int) ev.getX(pointerId), (int) ev.getY(pointerId))) {
-                        mPointerToViewMap.put(pointerId, j);
-                        returnValue = child.dispatchTouchEvent(convertEvent(child, ev, pointerId,
-                                MotionEvent.ACTION_DOWN));
+                    if (mTmpRect.contains((int) ev.getX(pointerIndex), (int) ev.getY(pointerIndex))) {
+                        mPointerToViewSparse.put(pointerId, j);
+                        returnValue = child.dispatchTouchEvent(convertEvent(child, ev,
+                                pointerIndex, MotionEvent.ACTION_DOWN));
                         break;
                     }
                 }
                 break;
             case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_POINTER_UP:
-                if (mPointerToViewMap.containsKey(pointerId)) {
-                    final int childIndex = mPointerToViewMap.get(pointerId);
-                    if (childIndex < childCount) {
-                        final View tragetView = group.getChildAt(childIndex);
-                        final MotionEvent event = convertEvent(tragetView, ev, pointerId,
-                                MotionEvent.ACTION_UP);
-                        returnValue = tragetView.dispatchTouchEvent(event);
-                        if (returnValue)
-                            mPointerToViewMap.remove(pointerId);
-                    } else {
-                        mPointerToViewMap.remove(pointerId);
-                    }
+            case MotionEvent.ACTION_POINTER_UP: {
+                final int childIndex = mPointerToViewSparse.get(pointerId, -1);
+                if (childIndex == -1)
+                    break;
+                if (childIndex < childCount) {
+                    final View targetView = group.getChildAt(childIndex);
+                    final MotionEvent event = convertEvent(targetView, ev, pointerIndex,
+                            MotionEvent.ACTION_UP);
+                    returnValue = targetView.dispatchTouchEvent(event);
+                    if (returnValue)
+                        mPointerToViewSparse.delete(pointerId);
+                } else {
+                    mPointerToViewSparse.delete(pointerId);
                 }
+            }
                 break;
             case MotionEvent.ACTION_MOVE:
                 for (int i = 0; i < pointerCount; ++i) {
                     final int pointerIdForMove = ev.getPointerId(i);
-                    if (mPointerToViewMap.containsKey(pointerIdForMove)) {
-                        final int childIndex = mPointerToViewMap.get(pointerIdForMove);
-                        if (childIndex < childCount) {
-                            final View tragetView = group.getChildAt(childIndex);
-                            final MotionEvent event = convertEvent(tragetView, ev,
-                                    pointerIdForMove, MotionEvent.ACTION_MOVE);
-                            if (tragetView.dispatchTouchEvent(event))
-                                returnValue = true;
-                        } else {
-                            mPointerToViewMap.remove(pointerId);
-                        }
+                    final int childIndex = mPointerToViewSparse.get(pointerIdForMove, -1);
+                    if (childIndex == -1)
+                        continue;
+                    if (childIndex < childCount) {
+                        final View targetView = group.getChildAt(childIndex);
+                        final MotionEvent event = convertEvent(targetView, ev, i,
+                                MotionEvent.ACTION_MOVE);
+                        if (targetView.dispatchTouchEvent(event))
+                            returnValue = true;
+                    } else {
+                        mPointerToViewSparse.delete(pointerId);
                     }
                 }
                 break;
