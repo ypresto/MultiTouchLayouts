@@ -1,5 +1,6 @@
 /*
 Copyright (c) 2011, Damian Kolakowski
+Copyright (c) 2013, Yuya Tanaka
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,7 +29,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package pl.androiddev.djlayouts;
+package com.ypresto.android.widget;
 
 import android.graphics.Rect;
 import android.util.SparseIntArray;
@@ -36,7 +37,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class DJDispatcher {
+public class MultiTouchDispatcher {
 
     private final SparseIntArray mPointerToViewSparse = new SparseIntArray();
 

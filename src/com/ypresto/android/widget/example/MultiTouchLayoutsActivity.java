@@ -1,5 +1,6 @@
 /*
 Copyright (c) 2011, Damian Kolakowski
+Copyright (c) 2013, Yuya Tanaka
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,18 +29,18 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package pl.androiddev.djlayouts;
+package com.ypresto.android.widget.example;
+
+import com.ypresto.android.widget.MultiTouchLinearLayout;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
-public class DJLayoutsActivity extends Activity {
+public class MultiTouchLayoutsActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,7 @@ public class DJLayoutsActivity extends Activity {
             }
         };
 
-        final DJLinearLayout layout = new DJLinearLayout(this) {
+        final MultiTouchLinearLayout layout = new MultiTouchLinearLayout(this) {
             {
                 setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
                 setOrientation(LinearLayout.HORIZONTAL);
@@ -68,19 +69,5 @@ public class DJLayoutsActivity extends Activity {
         };
 
         setContentView(layout);
-    }
-
-    private class DJLinearLayout extends LinearLayout {
-
-        private final DJDispatcher mDJDispatcher = new DJDispatcher();
-
-        public DJLinearLayout(Context context) {
-            super(context);
-        }
-
-        @Override
-        public boolean dispatchTouchEvent(MotionEvent ev) {
-            return mDJDispatcher.dispatchTouchEvent(this, ev);
-        }
     }
 }

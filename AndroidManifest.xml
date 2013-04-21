@@ -6,7 +6,7 @@
     <uses-sdk android:minSdkVersion="8" />
 
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
-        <activity android:name=".DJLayoutsActivity"
+        <activity android:name="com.ypresto.android.widget.example.MultiTouchLayoutsActivity"
                   android:label="@string/app_name" android:configChanges="orientation|locale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
