@@ -26,7 +26,8 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ */
+
 package pl.androiddev.djlayouts;
 
 import android.app.Activity;
@@ -43,43 +44,43 @@ public class DJLayoutsActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         final SeekBar bar1 = new SeekBar(this) {
-        	{
-        		setLayoutParams(new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.0f));
-        	}
+            {
+                setLayoutParams(new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.0f));
+            }
         };
-        
+
         final SeekBar bar2 = new SeekBar(this) {
-        	{
-        		setLayoutParams(new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.0f));
-        	}
+            {
+                setLayoutParams(new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.0f));
+            }
         };
-        
+
         final DJLinearLayout layout = new DJLinearLayout(this) {
-        	{
-        		setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+            {
+                setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
                 setOrientation(LinearLayout.HORIZONTAL);
                 setGravity(Gravity.CENTER_VERTICAL);
                 addView(bar1);
                 addView(bar2);
-        	}
+            }
         };
 
         setContentView(layout);
     }
-    
+
     private class DJLinearLayout extends LinearLayout {
 
-    	private final DJDispatcher mDJDispatcher = new DJDispatcher();
-    	
-		public DJLinearLayout(Context context) {
-			super(context);
-		}
-		
-		@Override
-		public boolean dispatchTouchEvent(MotionEvent ev) {
-			return mDJDispatcher.dispatchTouchEvent(this, ev);
-		}
+        private final DJDispatcher mDJDispatcher = new DJDispatcher();
+
+        public DJLinearLayout(Context context) {
+            super(context);
+        }
+
+        @Override
+        public boolean dispatchTouchEvent(MotionEvent ev) {
+            return mDJDispatcher.dispatchTouchEvent(this, ev);
+        }
     }
 }
