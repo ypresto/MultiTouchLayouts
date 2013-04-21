@@ -1,0 +1,6 @@
+Implements Android LinearLayout / RelativeLayout with multi-touch dispatcher,
+which converts multi-touch motion events into individual single-touch events
+for corresponding child view.
+
+Original codes written by Damian Kolakowski.
+https://bitbucket.org/damiankolakowski/djdispatcher
