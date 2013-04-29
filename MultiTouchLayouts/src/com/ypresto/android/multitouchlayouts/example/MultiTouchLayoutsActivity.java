@@ -29,9 +29,9 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.ypresto.android.widget.example;
+package com.ypresto.android.multitouchlayouts.example;
 
-import com.ypresto.android.widget.MultiTouchLinearLayout;
+import com.ypresto.android.multitouchlayouts.MultiTouchLinearLayout;
 
 import android.app.Activity;
 import android.os.Bundle;

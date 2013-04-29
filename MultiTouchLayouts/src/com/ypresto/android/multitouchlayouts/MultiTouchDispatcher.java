@@ -29,7 +29,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.ypresto.android.widget;
+package com.ypresto.android.multitouchlayouts;
 
 import android.graphics.Rect;
 import android.util.SparseIntArray;
